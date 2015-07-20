@@ -427,7 +427,7 @@ define(['ractive'], function (Ractive) {
   	}
 
   	body = args.pop();
-  	wrapped = "(function (" + args.join(", ") + ") {\n" + body + "\n})";
+  	wrapped = "(function (" + args.join(", ") + ") {\n  return" + body + "\n})";
 
   	return eval2(wrapped, options);
   };
@@ -667,8 +667,10 @@ define(['ractive'], function (Ractive) {
   				});
 
   				component = {};
-  				factory(component, config.require, rcu.Ractive);
-  				exports = component.exports;
+  				exports = factory(component, config.require, rcu.Ractive);
+  				if (!exports) {
+  					exports = component.exports;
+  				}
 
   				if (typeof exports === "object") {
   					for (prop in exports) {
