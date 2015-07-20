@@ -1,4 +1,12 @@
-define(['ractive'], function (Ractive) {
+define([
+	'ractive',
+	"createTokens",
+	"compileTokens"
+], function (
+	Ractive,
+	createTokens,
+	compileTokens
+) {
 
   'use strict';
 
@@ -268,12 +276,18 @@ define(['ractive'], function (Ractive) {
   				links.push(template.splice(i, 1)[0]);
   			}
 
-  			if (item.e === "script" && (!item.a || !item.a.type || item.a.type === "text/javascript")) {
+  			if (item.e === "script" && (!item.a || !item.a.type || item.a.type === "text/javascript" || item.a.type === "text/javasclisp")) {
   				if (scriptItem) {
   					throw new Error("You can only have one <script> tag per component file");
   				}
+
   				scriptItem = template.splice(i, 1)[0];
-  			}
+
+  				if (item.a && item.a.type && item.a.type === "text/javasclisp") {
+  					scriptItem.f[0] = compileTokens(createTokens(scriptItem.f[0])).js + ";";
+  					item.a.type = "text/javascript";
+  				}
+			  }
 
   			if (item.e === "style" && (!item.a || !item.a.type || item.a.type === "text/css")) {
   				styles.push(template.splice(i, 1)[0]);
