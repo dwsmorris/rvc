@@ -436,12 +436,12 @@ define([
   	if (options.sourceMap) {
   		options.sourceMap = clone(options.sourceMap);
 
-  		// shift everything a line down, to accommodate `(function (...) {`
-  		options.sourceMap.mappings = ";" + options.sourceMap.mappings;
+  		// shift everything a line down, to accommodate `(function (...) {` // seems not needed...
+  		options.sourceMap.mappings = /*";" +*/ options.sourceMap.mappings;
   	}
 
   	body = args.pop();
-  	wrapped = "(function (" + args.join(", ") + ") {\n  var temp = " + body + "; return temp;\n})";
+  	wrapped = "(function (" + args.join(", ") + ") {\n  var temp = " + body + " return temp;\n})";
 
   	return eval2(wrapped, options);
   };
