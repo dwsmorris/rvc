@@ -441,7 +441,7 @@ define([
   	}
 
   	body = args.pop();
-  	wrapped = "(function (" + args.join(", ") + ") {\n  return" + body + "\n})";
+  	wrapped = "(function (" + args.join(", ") + ") {\n  var temp = " + body + "; return temp;\n})";
 
   	return eval2(wrapped, options);
   };
