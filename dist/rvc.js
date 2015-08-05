@@ -669,7 +669,7 @@ define([
   			components: imports
   		};
 
-  		if (definition.script) {
+  		if (definition.script !== ";") {
   			var sourceMap = generateSourceMap(definition, {
   				source: url,
   				content: source
