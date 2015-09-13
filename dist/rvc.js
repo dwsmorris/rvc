@@ -689,7 +689,15 @@ define([
   				if (typeof exports === "object") { // merge in returned object
   					for (prop in exports) {
   						if (exports.hasOwnProperty(prop)) {
-  							options[prop] = exports[prop];
+  							if (_.contains(["data", "oninit"], prop)) {
+  								options[prop] = exports[prop];
+  							} else {
+  								if (!options.exports) {
+  									options.exports = {};
+  								}
+
+  								options.exports[prop] = exports[prop];
+  							}
   						}
   					}
   				} else { // other types returned should be referenced through 'exports'
