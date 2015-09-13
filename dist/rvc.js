@@ -686,12 +686,14 @@ define([
   					exports = component.exports;
   				}
 
-  				if (typeof exports === "object") {
+  				if (typeof exports === "object") { // merge in returned object
   					for (prop in exports) {
   						if (exports.hasOwnProperty(prop)) {
   							options[prop] = exports[prop];
   						}
   					}
+  				} else { // other types returned should be referenced through 'exports'
+  					options.exports = exports;
   				}
 
   				Component = rcu.Ractive.extend(options);
