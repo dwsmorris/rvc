@@ -1,6 +1,6 @@
 define([
 	'ractive',
-	"jsl"
+	"rvc!jsl"
 ], function (
 	Ractive,
 	jsl
