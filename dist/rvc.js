@@ -1,9 +1,9 @@
 define([
 	'ractive',
-	"rvc!jsl"
+	"jsl_jslToJs"
 ], function (
 	Ractive,
-	jsl
+	jslToJs
 ) {
 
   'use strict';
@@ -282,7 +282,7 @@ define([
   				scriptItem = template.splice(i, 1)[0];
 
   				if (item.a && item.a.type && item.a.type === "text/javasclisp") {
-  					var script = jsl.jslToJs(scriptItem.f[0]) + ";";
+  					var script = jslToJs(scriptItem.f[0]) + ";";
 					
   					scriptItem.f[0] = script.replace(/(require\(\"rvc!\w+\"\))?/g, function($0, $1) {
   						return $1 ? $1 + ".prototype.exports" : $0;
