@@ -1,9 +1,13 @@
 define([
+	"require",
 	'ractive',
-	"jsl_jslToJs"
+	"jsl_jslToJs",
+	"underscore"
 ], function (
+	require,
 	Ractive,
-	jslToJs
+	jslToJs,
+	_
 ) {
 
   'use strict';
@@ -282,7 +286,31 @@ define([
   				scriptItem = template.splice(i, 1)[0];
 
   				if (item.a && item.a.type && item.a.type === "text/javasclisp") {
-  					var script = jslToJs(scriptItem.f[0]) + ";";
+  					var jsl = scriptItem.f[0];
+
+  					var builtinSymbols = ["function", "console"];
+
+  					// find all verbs
+  					var verbs = _.chain(jsl.split(/[<\(]/g)).rest().filter(function(sexp) {
+  						return sexp !== "";
+  					}).map(function (sexp) {
+  						return sexp.split(/[\.\s]/g)[0];
+  					}).unique()
+					.filter(function(verb) {
+						return !_.contains(builtinSymbols, verb);
+					}).value();
+
+  					var paths = require.s.contexts._.config.paths;
+  					var script = "(function(" + verbs.join(", ") + ") {\n" + 
+						jslToJs(scriptItem.f[0]) + ";\n})(" + 
+  						_.map(verbs, function(verb) {
+  							var isHtml = paths[verb].indexOf("/html/") !== -1;
+
+  							return "require(" +
+								(isHtml ? "rvc!" : "") +
+								verb +
+								")";
+  						}).join(", ") + ")";
 					
   					scriptItem.f[0] = script.replace(/(require\(\"rvc!\w+\"\))?/g, function($0, $1) {
   						return $1 ? $1 + ".prototype.exports" : $0;
