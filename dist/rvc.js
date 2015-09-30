@@ -465,7 +465,7 @@ define([
   		options.sourceMap = clone(options.sourceMap);
 
   		// shift everything a line down, to accommodate `(function (...) {` // seems not needed...
-  		options.sourceMap.mappings = /*";" +*/ options.sourceMap.mappings;
+  		options.sourceMap.mappings = ";" + options.sourceMap.mappings;
   	}
 
   	body = args.pop();
