@@ -1,10 +1,8 @@
 define([
-	"require",
 	'ractive',
 	"jsl_jslToJs",
 	"underscore"
 ], function (
-	require,
 	Ractive,
 	jslToJs,
 	_
@@ -288,33 +286,33 @@ define([
   				if (item.a && item.a.type && item.a.type === "text/javasclisp") {
   					var jsl = scriptItem.f[0];
 
-  					var builtinSymbols = ["function", "console"];
+  					var builtinSymbols = ["function", "console", "/"];
+  					var paths = require.s.contexts._.config.paths;
+  					var map = require.s.contexts._.config.map["*"];
 
   					// find all verbs
-  					var verbs = _.chain(jsl.split(/[<\(]/g)).rest().filter(function(sexp) {
-  						return sexp !== "";
-  					}).map(function (sexp) {
-  						return sexp.split(/[\.\s]/g)[0];
+  					var symbols = _.chain(jsl.split(/[<>\(\)\[\]\{\}\s:,]/g)).filter(function (symbol) {
+  						return symbol !== "";
+  					}).map(function (symbol) {
+  						return (symbol.indexOf(".") !== -1) ? symbol.split(/[\.]/g)[0] : symbol;
   					}).unique()
-					.filter(function(verb) {
-						return !_.contains(builtinSymbols, verb);
+					.filter(function (symbol) {
+						return !_.contains(builtinSymbols, symbol) && isNaN(symbol) && paths[map[symbol] ? map[symbol] : symbol];
 					}).value();
 
-  					var paths = require.s.contexts._.config.paths;
-  					var script = "(function(" + verbs.join(", ") + ") {\n" + 
+  					var script = "(function(" + symbols.join(", ") + ") {\nreturn " +
 						jslToJs(scriptItem.f[0]) + ";\n})(" + 
-  						_.map(verbs, function(verb) {
-  							var isHtml = paths[verb].indexOf("/html/") !== -1;
+  						_.map(symbols, function (symbol) {
+  							var isHtml = paths[map[symbol] ? map[symbol] : symbol].indexOf("html/") !== -1;
 
-  							return "require(" +
+  							return "require(\"" +
 								(isHtml ? "rvc!" : "") +
-								verb +
-								")";
-  						}).join(", ") + ")";
+								symbol +
+								"\")" +
+  								(isHtml ? ".prototype.exports" : "");
+  						}).join(", ") + ");";
 					
-  					scriptItem.f[0] = script.replace(/(require\(\"rvc!\w+\"\))?/g, function($0, $1) {
-  						return $1 ? $1 + ".prototype.exports" : $0;
-  					});
+  					scriptItem.f[0] = script;
   					item.a.type = "text/javascript";
   				}
 			  }
