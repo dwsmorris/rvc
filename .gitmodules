@@ -1,0 +1,3 @@
+[submodule "dependencies/joyscript"]
+	path = dependencies/joyscript
+	url = https://github.com/dwsmorris/joyscript
