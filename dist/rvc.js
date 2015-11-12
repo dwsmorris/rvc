@@ -1,11 +1,13 @@
 define([
 	'ractive',
 	//"jsl_jslToJs",
-	"ramda"
+	"ramda",
+	"lodash"
 ], function (
 	Ractive,
 	//jslToJs,
-	R
+	R,
+	_
 ) {
 
   'use strict';
@@ -317,6 +319,23 @@ define([
   						item.a.type = "text/javascript";
   					} else */if (item.a.type === "text/joyscript") {
   						var jys = scriptItem.f[0];
+  						var paths = require.s.contexts._.config.paths;
+
+  						var symbolList = R.filter(function (symbol) { return symbol !== ""; }, jys.split(/[\[\]\s]/g));
+
+  						var dependencies = R.pipe(
+							R.map(function (symbol) { return isNaN(symbol) ? symbol : "jys_number" }),
+							R.uniq,
+							R.map(function (symbol) {
+								return symbol === "+" ? "jys_plus" :
+									symbol;
+							})
+						)(symbolList); // no
+
+  					//	var steps = R.pipe(
+
+					//	)(symbolList);
+						// dequote(environment/*dict of functions(stack)*/, script, stack);
   						var i = 0;
   					}
   				}

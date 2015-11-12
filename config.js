@@ -9,9 +9,8 @@ define([
 	R,
 	jys_config
 ) {
-
 	return R.merge(jys_config, {
-		paths: {
-		}
+		//paths: { // TODO: pull request
+		//}
 	});
 });

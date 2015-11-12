@@ -1,4 +1,0 @@
-﻿/*globals define*/
-define([
-
-])

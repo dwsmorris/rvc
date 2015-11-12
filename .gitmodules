@@ -4,3 +4,15 @@
 [submodule "dependencies/ractive"]
 	path = dependencies/ractive
 	url = https://github.com/ractivejs/ractive
+[submodule "dependencies/requirejs"]
+	path = dependencies/requirejs
+	url = https://github.com/jrburke/requirejs
+[submodule "dependencies/ramda"]
+	path = dependencies/ramda
+	url = https://github.com/ramda/ramda
+[submodule "dependencies/jasmine"]
+	path = dependencies/jasmine
+	url = https://github.com/jasmine/jasmine
+[submodule "dependencies/lodash"]
+	path = dependencies/lodash
+	url = https://github.com/lodash/lodash
