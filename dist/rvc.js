@@ -1,11 +1,11 @@
 define([
 	'ractive',
-	"jsl_jslToJs",
-	"underscore"
+	//"jsl_jslToJs",
+	"ramda"
 ], function (
 	Ractive,
-	jslToJs,
-	_
+	//jslToJs,
+	R
 ) {
 
   'use strict';
@@ -276,44 +276,49 @@ define([
   				links.push(template.splice(i, 1)[0]);
   			}
 
-  			if (item.e === "script" && (!item.a || !item.a.type || item.a.type === "text/javascript" || item.a.type === "text/javasclisp")) {
+  			if (item.e === "script" && (!item.a || !item.a.type || item.a.type === "text/javascript" || item.a.type === "text/javasclisp" || item.a.type === "text/joyscript")) {
   				if (scriptItem) {
   					throw new Error("You can only have one <script> tag per component file");
   				}
 
   				scriptItem = template.splice(i, 1)[0];
 
-  				if (item.a && item.a.type && item.a.type === "text/javasclisp") {
-  					var jsl = scriptItem.f[0];
+  				if (item.a && item.a.type) {
+  					/*if (item.a.type === "text/javasclisp") {
+  						var jsl = scriptItem.f[0];
 
-  					var builtinSymbols = ["function", "console", "/"];
-  					var paths = require.s.contexts._.config.paths;
-  					var map = require.s.contexts._.config.map["*"];
+  						var builtinSymbols = ["function", "console", "/"];
+  						var paths = require.s.contexts._.config.paths;
+  						var map = require.s.contexts._.config.map["*"];
 
-  					// find all verbs
-  					var symbols = _.chain(jsl.split(/[<>\(\)\[\]\{\}\s:,]/g)).filter(function (symbol) {
-  						return symbol !== "";
-  					}).map(function (symbol) {
-  						return (symbol.indexOf(".") !== -1) ? symbol.split(/[\.]/g)[0] : symbol;
-  					}).unique()
-					.filter(function (symbol) {
-						return !_.contains(builtinSymbols, symbol) && isNaN(symbol) && paths[map[symbol] ? map[symbol] : symbol];
-					}).value();
+  						// find all verbs
+  						var symbols = _.chain(jsl.split(/[<>\(\)\[\]\{\}\s:,]/g)).filter(function (symbol) {
+  							return symbol !== "";
+  						}).map(function (symbol) {
+  							return (symbol.indexOf(".") !== -1) ? symbol.split(/[\.]/g)[0] : symbol;
+  						}).unique()
+						.filter(function (symbol) {
+							return !_.contains(builtinSymbols, symbol) && isNaN(symbol) && paths[map[symbol] ? map[symbol] : symbol];
+						}).value();
 
-  					var script = "(function(" + symbols.join(", ") + ") {\nreturn " +
-						jslToJs(scriptItem.f[0]) + ";\n})(" + 
-  						_.map(symbols, function (symbol) {
-  							var isHtml = paths[map[symbol] ? map[symbol] : symbol].indexOf("html/") !== -1;
+  						var script = "(function(" + symbols.join(", ") + ") {\nreturn " +
+							jslToJs(scriptItem.f[0]) + ";\n})(" +
+							_.map(symbols, function (symbol) {
+								var isHtml = paths[map[symbol] ? map[symbol] : symbol].indexOf("html/") !== -1;
 
-  							return "require(\"" +
-								(isHtml ? "rvc!" : "") +
-								symbol +
-								"\")" +
-  								(isHtml ? ".prototype.exports" : "");
-  						}).join(", ") + ");";
-					
-  					scriptItem.f[0] = script;
-  					item.a.type = "text/javascript";
+								return "require(\"" +
+									(isHtml ? "rvc!" : "") +
+									symbol +
+									"\")" +
+									(isHtml ? ".prototype.exports" : "");
+							}).join(", ") + ");";
+
+  						scriptItem.f[0] = script;
+  						item.a.type = "text/javascript";
+  					} else */if (item.a.type === "text/joyscript") {
+  						var jys = scriptItem.f[0];
+  						var i = 0;
+  					}
   				}
 			  }
 

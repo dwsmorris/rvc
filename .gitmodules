@@ -1,3 +1,6 @@
 [submodule "dependencies/joyscript"]
 	path = dependencies/joyscript
 	url = https://github.com/dwsmorris/joyscript
+[submodule "dependencies/ractive"]
+	path = dependencies/ractive
+	url = https://github.com/ractivejs/ractive
